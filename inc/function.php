@@ -171,4 +171,28 @@ if (isset($_POST['deleteBarang'])) {
   }
 }
 
+// Add Lelang
+if (isset($_POST['lelangBarang'])) {
+  $id_barang = $_POST['id_barang'];
+
+  $admin = $conn->query("SELECT * FROM tb_admin");
+  $result = $admin->fetch_assoc();
+  $id_admin = $result['id_admin'];
+  $status = "Dibuka";
+
+
+  $addLelang = $conn->query("INSERT INTO tb_lelang (id_barang, id_admin, status) VALUES ('$id_barang', '$id_admin', '$status')");
+
+  $updateStatus = $conn->query("UPDATE tb_barang SET status = '$status' WHERE id_barang = '$id_barang'");
+
+  if (!$addLelang && !$updateStatus) {
+    echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
+    $conn->close();
+  } else {
+    $_SESSION['status'] = "Yeeaayyy..!!";
+    $_SESSION['desc'] = "Data berhasil ditambah";
+    $_SESSION['link'] = "barang";
+  }
+}
+
 

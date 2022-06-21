@@ -35,9 +35,12 @@
               <td>Rp. <?= number_format($result['harga_akhir']); ?></td>
               <td><?= $result['tanggal']; ?></td>
               <td><?= $result['deskripsi']; ?></td>
-              <td><?= $result['foto']; ?></td>
+              <td><?= $result['foto']; ?> (sementara)</td>
               <td><?= $result['status']; ?></td>
               <td>
+                <button type="button" class="btn btn-sm btn-success mb-2" data-toggle="modal" data-target="#lelangBarang<?= $result['id_barang']; ?>">
+                  Lelang
+                </button>
                 <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#editBarang<?= $result['id_barang']; ?>">
                   Edit
                 </button>
@@ -155,7 +158,7 @@ while ($result = $query->fetch_assoc()) {;
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Yakin menghapus Barang <?= $result['nama']; ?></h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Yakin menghapus Barang <?= $result['nama_barang']; ?></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -168,6 +171,35 @@ while ($result = $query->fetch_assoc()) {;
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             <button type="submit" name="deleteBarang" class="btn btn-danger float-right">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
+<!-- Lelang Barang -->
+<?php
+$query = $conn->query("SELECT * FROM tb_barang");
+while ($result = $query->fetch_assoc()) {;
+?>
+  <div class="modal fade" id="lelangBarang<?= $result['id_barang']; ?>" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Yakin Barang <?= $result['nama_barang']; ?> dilelang?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" method="post">
+          <div class="modal-body">
+            Data yang akan ditampilkan di dashboard masyarakat...!!!
+            <input type="hidden" name="id_barang" value="<?= $result['id_barang']; ?>">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" name="lelangBarang" class="btn btn-success float-right">Lelang</button>
           </div>
         </form>
       </div>
