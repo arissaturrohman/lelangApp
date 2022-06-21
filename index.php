@@ -25,7 +25,9 @@ include("inc/function.php");
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <link href="vendor/sweetalert/sweetalert.min.css" rel="stylesheet">
-
+    
+    <!-- jquery kanggo value modal ya lek -->
+    <script src="js/jquery/jquery.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -260,26 +262,6 @@ include("inc/function.php");
         unset($_SESSION['status']);
     }
     ?>
-
-<script>
-    document.getElementById("editfoto").addEventListener("change", validateFile)
-    function validateFile(){
-    const allowedExtensions =  ['jpg','png', 'jpeg'],
-            sizeLimit = 2_000_000; 
-
-    const { name:fileName, size:fileSize } = this.files[0];
-
-    const fileExtension = fileName.split(".").pop();
-
-    if(!allowedExtensions.includes(fileExtension)){
-        alert("fSilahkan upload file yang memiliki ekstensi .jpg | .jpeg | .png");
-        this.value = null;
-    }else if(fileSize > sizeLimit){
-        alert("Maaf. File Terlalu Besar ! Maksimal Upload 2 MB")
-        this.value = null;
-    }
-    }
-</script>
     
 
     <!-- Bootstrap core JavaScript-->

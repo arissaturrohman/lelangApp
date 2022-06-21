@@ -38,9 +38,17 @@
               <td><?= $result['foto']; ?></td>
               <td><?= $result['status']; ?></td>
               <td>
-                <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#editBarang<?= $result['id_barang']; ?>">
+                <a href="#" class="btn btn-sm btn-warning mb-2 edit" data-toggle="modal" data-target="#editBarang"
+                  data-id_barang = "<?= $result['id_barang']; ?>"
+                  data-nama_barang = "<?= $result['nama_barang']; ?>"
+                  data-harga_awal = "<?= $result['harga_awal']; ?>"
+                  data-harga_akhir = "<?= $result['harga_akhir']; ?>"
+                  data-tanggal = "<?= $result['tanggal']; ?>"
+                  data-deskripsi = "<?= $result['deskripsi']; ?>"
+                  data-foto = "<?= $result['foto']; ?>"
+                  data-status = "<?= $result['status']; ?>">
                   Edit
-                </button>
+                </a>
                 <button type="button" class="btn btn-sm btn-danger mb-2" data-toggle="modal" data-target="#deleteBarang<?= $result['id_barang']; ?>">
                   Delete
                 </button>
@@ -83,7 +91,7 @@
           </div>
           <div class="form-group">
             <label for="foto">Foto</label>
-            <input type="file" class="form-control-file" name="foto" id="foto" onchange="return validasiFile()">
+            <input type="file" class="form-control-file" name="foto" id="foto">
           </div>
         </div>
         <div class="modal-footer">
@@ -96,43 +104,38 @@
 </div>
 
 <!-- Edit Petugas -->
-<?php
-$query = $conn->query("SELECT * FROM tb_barang");
-while ($result = $query->fetch_assoc()) {
-?>
-  <div class="modal fade" id="editBarang<?= $result['id_barang']; ?>" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="editBarang" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Form Edit Barang <?= $result['nama_barang']; ?></h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Form Edit Barang</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <form action="" method="post" enctype="multipart/form-data" >
           <div class="modal-body">
-            <input type="hidden" name="id_barang" value="<?= $result['id_barang']; ?>">
-            <input type="hidden" name="cek_foto" value="<?= $result['foto']; ?>">
+            <input type="hidden" name="id_barang" id="editid_barang">
             <div class="form-group">
             <label for="nama_barang">Nama Barang</label>
-            <input type="text" class="form-control" id="nama_barang" value="<?= $result['nama_barang']; ?>" name="nama_barang" required>
+            <input type="text" class="form-control" id="editnama_barang" name="nama_barang" required>
           </div>
           <div class="form-group">
             <label for="harga_awal">Harga Awal</label>
-            <input type="number" class="form-control" id="harga_awal" value="<?= $result['harga_awal']; ?>" name="harga_awal"  required>
+            <input type="number" class="form-control" id="editharga_awal" name="harga_awal"  required>
           </div>
           <div class="form-group">
             <label for="tanggal">Tanggal</label>
-            <input type="date" class="form-control" id="tanggal" value="<?= $result['tanggal']; ?>" name="tanggal" required>
+            <input type="date" class="form-control" id="edittanggal" name="tanggal" required>
           </div>
           <div class="form-group">
             <label for="deskripsi">Deskripsi</label>
-            <textarea class="form-control" name="deskripsi" id="deskripsi" cols="30" rows="5"><?= $result['deskripsi']; ?></textarea>
+            <textarea class="form-control" name="deskripsi" id="editdeskripsi" cols="30" rows="5"></textarea>
           </div>
           <div class="form-group">
             <label for="editfoto">Foto</label>
             <input type="file" class="form-control-file mb-2" name="foto" id="editfoto">
-            <!-- <img src="img/<?= $result['foto']; ?>" class="rounded" style="width:50%; height:50%;"> -->
+            <img src="" id="image" class="rounded" style="width:50%; height:50%;">
           </div>
           </div>
           <div class="modal-footer">
@@ -143,8 +146,6 @@ while ($result = $query->fetch_assoc()) {
       </div>
     </div>
   </div>
-    
-<?php } ?>
 
 <!-- Delete Barang -->
 <?php
@@ -175,45 +176,64 @@ while ($result = $query->fetch_assoc()) {;
   </div>
 <?php } ?>
 
+<script type="text/javascript">
+  $('.edit').click(function(){
+    $('#editbarang').modal();
+    var id_val = $(this).attr('data-id_barang')
+    var nama_barang_val = $(this).attr('data-nama_barang')
+    var harga_awal_val = $(this).attr('data-harga_awal')
+    var harga_akhir_val = $(this).attr('data-harga_akhir')
+    var tanggal_val = $(this).attr('data-tanggal')
+    var deskripsi_val = $(this).attr('data-deskripsi')
+    var foto_val = $(this).attr('data-foto')
+    var status_val = $(this).attr('data-status')
 
-<script>
-    var uploadField = document.getElementById("foto", "editfoto");
-    uploadField.onchange = function() {
-    if(this.files[0].size > 2000000){ // ini untuk ukuran 800KB, 1000000 untuk 1 MB.
-       alert("Maaf. File Terlalu Besar ! Maksimal Upload 2 MB");
-       this.value = "";
-       return false;
-    };
-        var inputFile = document.getElementById('foto', 'editfoto');
-        var pathFile = inputFile.value;
-        var ekstensiOk = /(\.jpg|\.jpeg|\.png)$/i;
-        if(!ekstensiOk.exec(pathFile)){
-            alert('Silahkan upload file yang memiliki ekstensi .jpg | .jpeg | .png');
-            inputFile.value = '';
-            return false;
-        }
-    };
+    $('#editid_barang').val(id_val)
+    $('#judul').val(nama_barang_val)
+    $('#editnama_barang').val(nama_barang_val)
+    $('#editharga_awal').val(harga_awal_val)
+    $('#editharga_akhir').val(harga_akhir_val)
+    $('#edittanggal').val(tanggal_val)
+    $('#editdeskripsi').val(deskripsi_val)
+    $('#editfoto').attr("src","img/"+foto_val)
+    $('#image').attr("src","img/"+foto_val)
+    $('#editstatus').val(status_val)
 
+  })
 </script>
 
-<!-- <script>
-document.getElementById("editfoto").addEventListener("change", validateFile)
-function validateFile(){
-  const allowedExtensions =  ['jpg','png', 'jpeg'],
-        sizeLimit = 2_000_000; 
+<script>
+  var inputFileAdd = document.getElementById("foto");
+    inputFileAdd.onchange = function () {
+        if(this.files[0].size > 1000000){
+          alert("File Add kegedean yo lek");
+          this.value = "";
+          return false;
+        }
+        var pathFile = inputFileAdd.value;
+        var ekstensiOk = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        if(!ekstensiOk.exec(pathFile)){
+          alert('File Add ekstensi salah yo lek');
+          inputFileAdd.value = '';
+          return false;
+        }
+    }
 
-  const { name:fileName, size:fileSize } = this.files[0];
+//  Golek seng cepet : asline id "foto" dan "editfoto" di masukke 1 kondisi :)
 
-  const fileExtension = fileName.split(".").pop();
-
-  if(!allowedExtensions.includes(fileExtension)){
-    alert("fSilahkan upload file yang memiliki ekstensi .jpg | .jpeg | .png");
-    this.value = null;
-  }else if(fileSize > sizeLimit){
-    alert("Maaf. File Terlalu Besar ! Maksimal Upload 2 MB")
-    this.value = null;
-  }
-}
-</script> -->
-
-
+  var inputFileEdit = document.getElementById("editfoto");
+    inputFileEdit.onchange = function () {
+        if(this.files[0].size > 1000000){
+          alert("File Edit kegedean yo lek");
+          this.value = "";
+          return false;
+        }
+        var pathFile = inputFileEdit.value;
+        var ekstensiOk = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        if(!ekstensiOk.exec(pathFile)){
+          alert('File Edit ekstensi salah yo lek');
+          inputFileEdit.value = '';
+          return false;
+        }
+    }
+</script>
