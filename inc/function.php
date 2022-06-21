@@ -72,16 +72,16 @@ if (isset($_POST['addBarang'])) {
   $pecah = explode('.', $foto);
   $ekstensifoto = strtolower(end($pecah));
   $folder = 'img/';
-  $gambar = date('dmYHis').'-'.$foto;
+  $gambar = date('dmYHis') . '-' . $foto;
 
   if (in_array($ekstensifoto, $ekstensi) === true) {
     if ($size < 5000000) {
-      
-      move_uploaded_file($source, $folder.$gambar);
-      
-      
+
+      move_uploaded_file($source, $folder . $gambar);
+
+
       $addBarang = $conn->query("INSERT INTO tb_barang (nama_barang, harga_awal, harga_akhir, tanggal, deskripsi, foto, status) VALUES ('$nama_barang', '$harga_awal', '$harga_akhir', '$tanggal', '$deskripsi', '$gambar', '$status')");
-      
+
       if (!$addBarang) {
         echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
         $conn->close();
@@ -89,7 +89,7 @@ if (isset($_POST['addBarang'])) {
         $_SESSION['status'] = "Yeeaayyy..!!";
         $_SESSION['desc'] = "Data berhasil ditambah";
         $_SESSION['link'] = "barang";
-      } 
+      }
     }
   }
 }
@@ -113,44 +113,44 @@ if (isset($_POST['editBarang'])) {
   $pecah = explode('.', $foto);
   $ekstensifoto = strtolower(end($pecah));
   $folder = 'img/';
-  $gambar = date('dmYHis').'-'.$foto;
+  $gambar = date('dmYHis') . '-' . $foto;
 
   if (empty($foto)) {
 
     $editBarang = $conn->query("UPDATE tb_barang SET nama_barang = '$nama_barang', harga_awal = '$harga_awal', harga_akhir = '$harga_akhir', tanggal = '$tanggal', deskripsi = '$deskripsi' WHERE id_barang = '$id_barang'");
-      
-      if (!$editBarang) {
-        echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
-        $conn->close();
-      } else {
-        $_SESSION['status'] = "Yeeaayyy..!!";
-        $_SESSION['desc'] = "Data berhasil ditambah";
-        $_SESSION['link'] = "barang";
-      } 
+
+    if (!$editBarang) {
+      echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
+      $conn->close();
+    } else {
+      $_SESSION['status'] = "Yeeaayyy..!!";
+      $_SESSION['desc'] = "Data berhasil ditambah";
+      $_SESSION['link'] = "barang";
+    }
   } elseif (in_array($ekstensifoto, $ekstensi) === true) {
     if ($size < 5000000) {
-      
-      move_uploaded_file($source, $folder.$gambar);
-      
+
+      move_uploaded_file($source, $folder . $gambar);
+
       $barang = $conn->query("SELECT * FROM tb_barang");
       $result = $barang->fetch_assoc();
       $foto = $result['foto'];
 
       $editBarang = $conn->query("UPDATE tb_barang SET nama_barang = '$nama_barang', harga_awal = '$harga_awal', harga_akhir = '$harga_akhir', tanggal = '$tanggal', deskripsi = '$deskripsi', foto = '$gambar', status = '$status' WHERE id_barang = '$id_barang'");
-      unlink("img/".$foto);
-      
-     } if (!$editBarang) {
-        echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
-        $conn->close();
-      } else {
-        $_SESSION['status'] = "Yeeaayyy..!!";
-        $_SESSION['desc'] = "Data berhasil ditambah";
-        $_SESSION['link'] = "barang";
-      } 
+      unlink("img/" . $foto);
+    }
+    if (!$editBarang) {
+      echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
+      $conn->close();
+    } else {
+      $_SESSION['status'] = "Yeeaayyy..!!";
+      $_SESSION['desc'] = "Data berhasil ditambah";
+      $_SESSION['link'] = "barang";
     }
   }
+}
 
-  //Delete Barang
+//Delete Barang
 if (isset($_POST['deleteBarang'])) {
   $id_barang = mysqli_real_escape_string($conn, $_POST['id_barang']);
 
@@ -159,7 +159,7 @@ if (isset($_POST['deleteBarang'])) {
   $foto = $result['foto'];
 
   $deleteBarang = $conn->query("DELETE FROM tb_barang WHERE id_barang = $id_barang");
-  unlink("img/".$foto);
+  unlink("img/" . $foto);
 
   if (!$deleteBarang) {
     echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
@@ -195,4 +195,35 @@ if (isset($_POST['lelangBarang'])) {
   }
 }
 
+// Add Tawar
+if (isset($_POST['tawarBarang'])) {
+  $id_barang = $_POST['id_barang'];
+  $harga = $_POST['harga_tawar'];
+  $id_masyarakat = $_SESSION['id_masyarakat'];
 
+  $dataHarga = $conn->query("SELECT * FROM tb_lelang WHERE id_barang = '$id_barang'");
+  $resultHarga = $dataHarga->fetch_assoc();
+  $hargaLelang = $resultHarga['harga'];
+
+  if ($harga < $hargaLelang) {
+?>
+    <script>
+      alert("Harga tidak boleh dibawah harga lelang");
+      window.location.href = "?page=penawaran&id=<?= $id_barang; ?>";
+      die();
+    </script>
+<?php
+  } else {
+
+    $addTawar = $conn->query("INSERT INTO tb_tawar (id_barang, id_masyarakat, harga) VALUES ('$id_barang', '$id_masyarakat', '$harga')");
+
+    if (!$addTawar) {
+      echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
+      $conn->close();
+    } else {
+      $_SESSION['status'] = "Yeeaayyy..!!";
+      $_SESSION['desc'] = "Barang berhasil ditawar";
+      $_SESSION['link'] = "?page=penawaran&id=" . "$id_barang";
+    }
+  }
+}

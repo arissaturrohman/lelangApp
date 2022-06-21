@@ -38,15 +38,10 @@
               <td><?= $result['foto']; ?> (sementara)</td>
               <td><?= $result['status']; ?></td>
               <td>
-                <a href="#" class="btn btn-sm btn-warning mb-2 edit" data-toggle="modal" data-target="#editBarang"
-                  data-id_barang = "<?= $result['id_barang']; ?>"
-                  data-nama_barang = "<?= $result['nama_barang']; ?>"
-                  data-harga_awal = "<?= $result['harga_awal']; ?>"
-                  data-harga_akhir = "<?= $result['harga_akhir']; ?>"
-                  data-tanggal = "<?= $result['tanggal']; ?>"
-                  data-deskripsi = "<?= $result['deskripsi']; ?>"
-                  data-foto = "<?= $result['foto']; ?>"
-                  data-status = "<?= $result['status']; ?>">
+                <button type="button" class="btn btn-sm btn-success mb-2" data-toggle="modal" data-target="#lelangBarang<?= $result['id_barang']; ?>">
+                  Lelang
+                </button>
+                <a href="#" class="btn btn-sm btn-warning mb-2 edit" data-toggle="modal" data-target="#editBarang" data-id_barang="<?= $result['id_barang']; ?>" data-nama_barang="<?= $result['nama_barang']; ?>" data-harga_awal="<?= $result['harga_awal']; ?>" data-harga_akhir="<?= $result['harga_akhir']; ?>" data-tanggal="<?= $result['tanggal']; ?>" data-deskripsi="<?= $result['deskripsi']; ?>" data-foto="<?= $result['foto']; ?>" data-status="<?= $result['status']; ?>">
                   Edit
                 </a>
                 <button type="button" class="btn btn-sm btn-danger mb-2" data-toggle="modal" data-target="#deleteBarang<?= $result['id_barang']; ?>">
@@ -79,7 +74,7 @@
           </div>
           <div class="form-group">
             <label for="harga_awal">Harga Awal</label>
-            <input type="number" class="form-control" id="harga_awal" name="harga_awal"  required>
+            <input type="number" class="form-control" id="harga_awal" name="harga_awal" required>
           </div>
           <div class="form-group">
             <label for="tanggal">Tanggal</label>
@@ -104,25 +99,25 @@
 </div>
 
 <!-- Edit Petugas -->
-  <div class="modal fade" id="editBarang" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Form Edit Barang</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <form action="" method="post" enctype="multipart/form-data" >
-          <div class="modal-body">
-            <input type="hidden" name="id_barang" id="editid_barang">
-            <div class="form-group">
+<div class="modal fade" id="editBarang" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Form Edit Barang</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post" enctype="multipart/form-data">
+        <div class="modal-body">
+          <input type="hidden" name="id_barang" id="editid_barang">
+          <div class="form-group">
             <label for="nama_barang">Nama Barang</label>
             <input type="text" class="form-control" id="editnama_barang" name="nama_barang" required>
           </div>
           <div class="form-group">
             <label for="harga_awal">Harga Awal</label>
-            <input type="number" class="form-control" id="editharga_awal" name="harga_awal"  required>
+            <input type="number" class="form-control" id="editharga_awal" name="harga_awal" required>
           </div>
           <div class="form-group">
             <label for="tanggal">Tanggal</label>
@@ -137,15 +132,15 @@
             <input type="file" class="form-control-file mb-2" name="foto" id="editfoto">
             <img src="" id="image" class="rounded" style="width:50%; height:50%;">
           </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" name="editBarang" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" name="editBarang" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
 <!-- Delete Barang -->
 <?php
@@ -176,8 +171,37 @@ while ($result = $query->fetch_assoc()) {;
   </div>
 <?php } ?>
 
+<!-- Lelang Barang -->
+<?php
+$query = $conn->query("SELECT * FROM tb_barang");
+while ($result = $query->fetch_assoc()) {;
+?>
+  <div class="modal fade" id="lelangBarang<?= $result['id_barang']; ?>" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Yakin lelang Barang <?= $result['nama_barang']; ?></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="" method="post">
+          <div class="modal-body">
+            Data yang dilelang akan ditampilkan di dashboard masyarakat..!!!
+            <input type="hidden" name="id_barang" value="<?= $result['id_barang']; ?>">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" name="lelangBarang" class="btn btn-success float-right">Lelang</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
 <script type="text/javascript">
-  $('.edit').click(function(){
+  $('.edit').click(function() {
     $('#editbarang').modal();
     var id_val = $(this).attr('data-id_barang')
     var nama_barang_val = $(this).attr('data-nama_barang')
@@ -195,8 +219,8 @@ while ($result = $query->fetch_assoc()) {;
     $('#editharga_akhir').val(harga_akhir_val)
     $('#edittanggal').val(tanggal_val)
     $('#editdeskripsi').val(deskripsi_val)
-    $('#editfoto').attr("src","img/"+foto_val)
-    $('#image').attr("src","img/"+foto_val)
+    $('#editfoto').attr("src", "img/" + foto_val)
+    $('#image').attr("src", "img/" + foto_val)
     $('#editstatus').val(status_val)
 
   })
@@ -204,36 +228,36 @@ while ($result = $query->fetch_assoc()) {;
 
 <script>
   var inputFileAdd = document.getElementById("foto");
-    inputFileAdd.onchange = function () {
-        if(this.files[0].size > 1000000){
-          alert("File Add kegedean yo lek");
-          this.value = "";
-          return false;
-        }
-        var pathFile = inputFileAdd.value;
-        var ekstensiOk = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-        if(!ekstensiOk.exec(pathFile)){
-          alert('File Add ekstensi salah yo lek');
-          inputFileAdd.value = '';
-          return false;
-        }
+  inputFileAdd.onchange = function() {
+    if (this.files[0].size > 1000000) {
+      alert("File Add kegedean yo lek");
+      this.value = "";
+      return false;
     }
+    var pathFile = inputFileAdd.value;
+    var ekstensiOk = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    if (!ekstensiOk.exec(pathFile)) {
+      alert('File Add ekstensi salah yo lek');
+      inputFileAdd.value = '';
+      return false;
+    }
+  }
 
-//  Golek seng cepet : asline id "foto" dan "editfoto" di masukke 1 kondisi :)
+  //  Golek seng cepet : asline id "foto" dan "editfoto" di masukke 1 kondisi :)
 
   var inputFileEdit = document.getElementById("editfoto");
-    inputFileEdit.onchange = function () {
-        if(this.files[0].size > 1000000){
-          alert("File Edit kegedean yo lek");
-          this.value = "";
-          return false;
-        }
-        var pathFile = inputFileEdit.value;
-        var ekstensiOk = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-        if(!ekstensiOk.exec(pathFile)){
-          alert('File Edit ekstensi salah yo lek');
-          inputFileEdit.value = '';
-          return false;
-        }
+  inputFileEdit.onchange = function() {
+    if (this.files[0].size > 1000000) {
+      alert("File Edit kegedean yo lek");
+      this.value = "";
+      return false;
     }
+    var pathFile = inputFileEdit.value;
+    var ekstensiOk = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    if (!ekstensiOk.exec(pathFile)) {
+      alert('File Edit ekstensi salah yo lek');
+      inputFileEdit.value = '';
+      return false;
+    }
+  }
 </script>
