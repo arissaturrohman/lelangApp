@@ -23,6 +23,8 @@ if ($page == 'petugas') {
 } elseif ($page == 'penawaran') {
   if ($action == '') {
     include "page/penawaran/penawaran.php";
+  }elseif ($action == 'add') {
+    include "page/penawaran/add.php";
   }
 } elseif ($page == 'laporan') {
   if ($action == '') {

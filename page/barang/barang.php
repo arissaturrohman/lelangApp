@@ -35,7 +35,7 @@
               <td>Rp. <?= number_format($result['harga_akhir']); ?></td>
               <td><?= $result['tanggal']; ?></td>
               <td><?= $result['deskripsi']; ?></td>
-              <td><?= $result['foto']; ?></td>
+              <td><?= $result['foto']; ?> (sementara)</td>
               <td><?= $result['status']; ?></td>
               <td>
                 <a href="#" class="btn btn-sm btn-warning mb-2 edit" data-toggle="modal" data-target="#editBarang"
@@ -156,7 +156,7 @@ while ($result = $query->fetch_assoc()) {;
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Yakin menghapus Barang <?= $result['nama']; ?></h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Yakin menghapus Barang <?= $result['nama_barang']; ?></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
