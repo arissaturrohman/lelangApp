@@ -1,0 +1,7 @@
+RewriteEngine on
+RewriteRule ^petugas$ index.php?page=petugas [QSA]
+RewriteRule ^barang$ index.php?page=barang [QSA]
+RewriteRule ^masyarakat$ index.php?page=masyarakat [QSA]
+RewriteRule ^lelang$ index.php?page=lelang [QSA]
+RewriteRule ^penawaran$ index.php?page=penawaran [QSA]
+RewriteRule ^laporan$ index.php?page=laporan [QSA]
