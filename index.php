@@ -107,11 +107,11 @@ include("inc/function.php");
                     <span>Data Lelang</span></a>
             </li>
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link" href="penawaran">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Daftar Penawaran</span></a>
-            </li>
+            </li> -->
 
             <!-- Divider -->
             <hr class="sidebar-divider">

@@ -13,7 +13,24 @@
                     <p><?= $result['deskripsi']; ?></p>
                     <h1><?= number_format($result['harga_awal']); ?></h1>
                 </div>
-                <a href="?page=penawaran&id=<?= $result['id_barang']; ?>" class="btn btn-lg btn-block btn-success">TAWAR SEKARANG</a>
+                <?php 
+                if ($_SESSION['role'] =="Administrator") {
+                    echo"
+                        <a href='?page=penawaran&id=$result[id_barang]' class='btn btn-lg btn-block btn-success'>LIHAT DATA</a>
+                    ";
+                }
+                    elseif ($_SESSION['role'] =="Petugas") {
+                        echo"
+                            <a href='?page=penawaran&id=$result[id_barang]' class='btn btn-lg btn-block btn-success'>LIHAT DATA</a>
+                        ";
+                    }
+                 else {
+                    echo"
+                        <a href='?page=penawaran&id=$result[id_barang]' class='btn btn-lg btn-block btn-success'>TAWAR SEKARANG</a>
+                    ";
+                }
+                ?>
+                <!-- <a href="?page=penawaran&id=<?= $result['id_barang']; ?>" class="btn btn-lg btn-block btn-success">TAWAR SEKARANG</a> -->
             </div>
         </div>
     <?php } ?>

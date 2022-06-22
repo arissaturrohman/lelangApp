@@ -1,7 +1,7 @@
 <?php
 $id = $_GET['id'];
 
-$barang = $conn->query("SELECT * FROM tb_lelang where id_barang = '$id'");
+$barang = $conn->query("SELECT * FROM tb_barang where id_barang = '$id'");
 $resultBarang = $barang->fetch_assoc();
 $id_barang = $resultBarang['id_barang'];
 $id_admin = $resultBarang['id_admin'];
@@ -12,6 +12,12 @@ $namaAdmin = $resultAdmin['role'];
 
 $lelang = $conn->query("SELECT * FROM tb_lelang, tb_barang, tb_admin where tb_lelang.id_barang = tb_barang.id_barang");
 $result = $lelang->fetch_assoc();
+
+$lelang2 = $conn->query("SELECT * FROM tb_lelang where id_barang = '$id'");
+$resultLelang = $lelang2->fetch_assoc();
+
+$pemenang = $conn->query("SELECT * FROM tb_lelang, tb_masyarakat WHERE tb_lelang.id_masyarakat = tb_masyarakat.id_masyarakat");
+$resultPemenang = $pemenang->fetch_assoc();
 
 ?>
 
@@ -27,23 +33,23 @@ $result = $lelang->fetch_assoc();
                 <table class="table" width="100%">
                     <tr>
                         <td width="35%">Nama Barang</td>
-                        <td>: <?= $result['nama_barang']; ?></td>
+                        <td>: <?= $resultBarang['nama_barang']; ?></td>
                     </tr>
                     <tr>
                         <td width="35%">Tanggal lelang</td>
-                        <td>: <?= $result['tanggal']; ?></td>
+                        <td>: <?= $resultBarang['tanggal']; ?></td>
                     </tr>
                     <tr>
                         <td width="35%">Harga awal</td>
-                        <td>: Rp. <?= number_format($result['harga_awal']); ?></td>
+                        <td>: Rp. <?= number_format($resultBarang['harga_awal']); ?></td>
                     </tr>
                     <tr>
                         <td width="35%">Status</td>
-                        <td>: <?= $result['status']; ?></td>
+                        <td>: <?= $resultBarang['status']; ?></td>
                     </tr>
                     <tr>
                         <td width="35%">Pemenang</td>
-                        <td>: <?= $result['pemenang']; ?></td>
+                        <td>: <?= $resultPemenang['nama']; ?></td>
                     </tr>
                     <tr>
                         <td width="35%">Operator</td>
@@ -70,3 +76,71 @@ $result = $lelang->fetch_assoc();
         </form>
     </div>
 </div>
+
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Data Penawaran</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable1" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th width="3%">No</th>
+            <th>Nama</th>
+            <th>Penawaran</th>
+            <?php 
+            if ($_SESSION['id_admin']) {
+               echo"<th width='7%'>Opsi</th>";
+            }
+            ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          $no = 1;
+          $tawar = $conn->query("SELECT * FROM tb_tawar WHERE id_barang = '$id' ORDER BY (harga) DESC");
+          while ($result = $tawar->fetch_assoc()) {
+
+            
+          ?>
+            <tr>
+              <td><?= $no++; ?></td>
+              <?php 
+                $id_masy = $result['id_masyarakat'];
+                $masyarakat = $conn->query("SELECT * FROM tb_masyarakat WHERE id_masyarakat = '$id_masy'");
+                $resultMasy = $masyarakat->fetch_assoc() ;
+                    echo"<td>$resultMasy[nama]</td>";
+                
+                ?>
+              <td>Rp. <?= number_format($result['harga']); ?></td>
+              <?php 
+                if ($_SESSION['id_admin']) {
+                    
+                ?>
+
+               <th class="text-center">
+                <form action="" method="post">
+                    <input type="hidden" name="idBarang" value="<?= $result['id_barang']; ?>">
+                    <input type="hidden" name="hargaPemenang" value="<?= $result['harga']; ?>">
+                    <input type="hidden" name="idMasyarakat" value="<?= $resultMasy['id_masyarakat']; ?>">
+                    <input type="hidden" name="idLelang" value="<?= $resultLelang['id_lelang']; ?>">
+                    <button onclick="return confirm('Yakin untuk dimenangkan?');" type="submit" name="pemenang" class="btn btn-sm btn-success mb-2 <?= $tampil; ?>">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </form>
+               </th>
+
+               <?php
+            } 
+            ?>
+            </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+

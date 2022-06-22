@@ -1,5 +1,5 @@
 <?php 
-include('inc/function.php');
+include('inc/config.php');
 
 if (isset($_POST['daftar'])) {
   $nama = mysqli_real_escape_string($conn, $_POST['nama']);
@@ -14,7 +14,7 @@ if (isset($_POST['daftar'])) {
     ?>
     <script>
       alert('Berhasil');
-      window.location.href='login.php';
+      window.location.href='login1.php';
     </script>
     <?php
   }

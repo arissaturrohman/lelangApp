@@ -17,8 +17,14 @@
             <th>Harga Akhir</th>
             <th>Tanggal</th>
             <th>Deskripsi</th>
-            <th>Foto</th>
-            <th>Status</th>
+
+            <?php 
+            if ($result['status'] == "proses") {
+              echo "<th>Status</th>";
+            } elseif ($result['status'] == "Dibuka") {
+            }
+            ?>
+            
             <th>Opsi</th>
           </tr>
         </thead>
@@ -35,19 +41,42 @@
               <td>Rp. <?= number_format($result['harga_akhir']); ?></td>
               <td><?= $result['tanggal']; ?></td>
               <td><?= $result['deskripsi']; ?></td>
-              <td><?= $result['foto']; ?> (sementara)</td>
               <td><?= $result['status']; ?></td>
-              <td>
-                <button type="button" class="btn btn-sm btn-success mb-2" data-toggle="modal" data-target="#lelangBarang<?= $result['id_barang']; ?>">
-                  Lelang
-                </button>
-                <a href="#" class="btn btn-sm btn-warning mb-2 edit" data-toggle="modal" data-target="#editBarang" data-id_barang="<?= $result['id_barang']; ?>" data-nama_barang="<?= $result['nama_barang']; ?>" data-harga_awal="<?= $result['harga_awal']; ?>" data-harga_akhir="<?= $result['harga_akhir']; ?>" data-tanggal="<?= $result['tanggal']; ?>" data-deskripsi="<?= $result['deskripsi']; ?>" data-foto="<?= $result['foto']; ?>" data-status="<?= $result['status']; ?>">
-                  Edit
-                </a>
-                <button type="button" class="btn btn-sm btn-danger mb-2" data-toggle="modal" data-target="#deleteBarang<?= $result['id_barang']; ?>">
-                  Delete
-                </button>
-              </td>
+
+              <?php 
+              if ($result['status'] == "proses") {
+                ?>
+                <td>
+                  <button type="button" class="btn btn-sm btn-success mb-2" data-toggle="modal" data-target="#lelangBarang<?= $result['id_barang']; ?>">
+                    Lelang
+                  </button>
+                  <a href="#" class="btn btn-sm btn-warning mb-2 edit" data-toggle="modal" data-target="#editBarang" data-id_barang="<?= $result['id_barang']; ?>" data-nama_barang="<?= $result['nama_barang']; ?>" data-harga_awal="<?= $result['harga_awal']; ?>" data-harga_akhir="<?= $result['harga_akhir']; ?>" data-tanggal="<?= $result['tanggal']; ?>" data-deskripsi="<?= $result['deskripsi']; ?>" data-foto="<?= $result['foto']; ?>" data-status="<?= $result['status']; ?>">
+                    Edit
+                  </a>
+                  <button type="button" class="btn btn-sm btn-danger mb-2" data-toggle="modal" data-target="#deleteBarang<?= $result['id_barang']; ?>">
+                    Delete
+                  </button>
+                </td>
+
+                <?php
+              } elseif ($result['status'] == "Dibuka") {
+                ?>
+                <td>
+                  <button type="button" class="btn btn-sm btn-success mb-2" data-toggle="modal" data-target="#lelangBarang<?= $result['id_barang']; ?>">
+                    Lelang
+                  </button>
+                  <a href="#" class="btn btn-sm btn-warning mb-2 edit" data-toggle="modal" data-target="#editBarang" data-id_barang="<?= $result['id_barang']; ?>" data-nama_barang="<?= $result['nama_barang']; ?>" data-harga_awal="<?= $result['harga_awal']; ?>" data-harga_akhir="<?= $result['harga_akhir']; ?>" data-tanggal="<?= $result['tanggal']; ?>" data-deskripsi="<?= $result['deskripsi']; ?>" data-foto="<?= $result['foto']; ?>" data-status="<?= $result['status']; ?>">
+                    Edit
+                  </a>
+                  <button type="button" class="btn btn-sm btn-danger mb-2" data-toggle="modal" data-target="#deleteBarang<?= $result['id_barang']; ?>">
+                    Delete
+                  </button>
+                </td>
+
+                <?php
+              }
+              ?>
+
             </tr>
           <?php } ?>
         </tbody>

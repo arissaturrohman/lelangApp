@@ -1,6 +1,12 @@
 <?php
+
 error_reporting(0);
 include("config.php");
+
+if (!isset($_SESSION["login"])) {
+  header("Location: login.php");
+  exit;
+}
 
 // Add Petugas
 if (isset($_POST['addPetugas'])) {
@@ -64,6 +70,7 @@ if (isset($_POST['addBarang'])) {
   $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
   $harga_akhir = 0;
   $status = "proses";
+  $id_admin = $_SESSION['id_admin'];
 
   $foto = $_FILES['foto']['name'];
   $source = $_FILES['foto']['tmp_name'];
@@ -80,7 +87,7 @@ if (isset($_POST['addBarang'])) {
       move_uploaded_file($source, $folder . $gambar);
 
 
-      $addBarang = $conn->query("INSERT INTO tb_barang (nama_barang, harga_awal, harga_akhir, tanggal, deskripsi, foto, status) VALUES ('$nama_barang', '$harga_awal', '$harga_akhir', '$tanggal', '$deskripsi', '$gambar', '$status')");
+      $addBarang = $conn->query("INSERT INTO tb_barang (nama_barang, harga_awal, harga_akhir, tanggal, deskripsi, foto, status, id_admin) VALUES ('$nama_barang', '$harga_awal', '$harga_akhir', '$tanggal', '$deskripsi', '$gambar', '$status', '$id_admin')");
 
       if (!$addBarang) {
         echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
@@ -200,10 +207,11 @@ if (isset($_POST['tawarBarang'])) {
   $id_barang = $_POST['id_barang'];
   $harga = $_POST['harga_tawar'];
   $id_masyarakat = $_SESSION['id_masyarakat'];
+  
 
-  $dataHarga = $conn->query("SELECT * FROM tb_lelang WHERE id_barang = '$id_barang'");
+  $dataHarga = $conn->query("SELECT * FROM tb_barang WHERE id_barang = '$id_barang'");
   $resultHarga = $dataHarga->fetch_assoc();
-  $hargaLelang = $resultHarga['harga'];
+  $hargaLelang = $resultHarga['harga_awal'];
 
   if ($harga < $hargaLelang) {
 ?>
@@ -227,3 +235,25 @@ if (isset($_POST['tawarBarang'])) {
     }
   }
 }
+
+// Pemenang
+if (isset($_POST['pemenang'])) {
+  $idBarang = $_POST['idBarang'];
+  $hargaPemenang = $_POST['hargaPemenang'];
+  $idMasyarakat = $_POST['idMasyarakat'];
+  $idLelang = $_POST['idLelang'];
+  $status = "Ditutup";
+
+  $updatePemenang = $conn->query("UPDATE tb_lelang SET id_masyarakat = '$idMasyarakat', status = '$status', harga = '$hargaPemenang' WHERE id_lelang = '$idLelang'");
+
+  $updateBarang = $conn->query("UPDATE tb_barang SET harga_akhir = '$hargaPemenang', status = '$status' WHERE id_barang = '$idBarang'");
+
+  if (!$updateBarang && !$updatePemenang) {
+    echo ("Error description : <span style='color:red;'>" . $conn->error . "</span> Cek lagi bro");
+      $conn->close();
+    } else {
+      $_SESSION['status'] = "Yeeaayyy..!!";
+      $_SESSION['desc'] = "Barang berhasil ditawar";
+      $_SESSION['link'] = "lelang";
+    }
+  }
